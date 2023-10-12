@@ -1,38 +1,45 @@
-export default function PostList({$target, testData}) {
-    const $postList = document.createElement("div")
-    $postList.className = "postList"
-    $target.appendChild($postList)
-    
-    this.createTreeView = (data) => {
-        let str = ''
-        for (const key in data) {
-            if (data[key].documents.length > 0) {
-                str += `<li class="dataList">📄 ${data[key].title}
-                    <button class="addBtn">➕</button>
-                    <button class="delBtn">🗑️</button>
-                    <ul>${this.createTreeView(data[key].documents)}</ul>
-                </li>`
-            } else {
-                str += `<li class="dataList">📄 ${data[key].title}
-                    <button class="addBtn">➕</button>
-                    <button class="delBtn">🗑️</button>
-                </li>` 
-            }
-        }
+import NewBtn from "../\bbutton/NewBtn.js"
+import { request } from "../../utils/api.js"
+import PostList from "./PostList.js"
 
-        return str
+export default function PostPage ({ $target }) {
+    const $page = document.createElement("div")
+    $page.className = 'documentDiv'
+    $target.appendChild($page)
+
+    const postList = new PostList({ 
+      $target: $page,
+      initialState: [],
+      onAttach: async () => {
+        await request('/documents', {
+           method: 'POST',
+           body: {}
+        })
+        this.setState()
+      },
+      onDelete: async () => {
+        await request('/documents', {
+          method: 'DELETE'
+        })
+        this.setState()
+      }
+    })
+    
+    new NewBtn({
+      $target: $page,
+      initialState: {
+        text: '+ New Page',
+        name: 'addNew'
+      }
+    })
+    
+    this.setState = async () => {
+      const posts = await request('/documents')
+      postList.setState(posts)
+      this.render()
     }
 
-    $postList.innerHTML = 
-        `<ul>
-            ${testData.map(document => 
-                    `<li class="dataList">📄 ${document.title}
-                        <button class="addBtn">➕</button>
-                        <button class="delBtn">🗑️</button>
-                    </li>
-                    ${document.documents.length > 0 ? `<ul>${this.createTreeView(document.documents)}</ul>` : ''}
-                    `
-                ).join("")
-            }
-        </ul>`
-    } 
+    this.render = () => {
+        $target.appendChild($page)
+    }
+}
