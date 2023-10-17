@@ -10,4 +10,7 @@
 - [x] api 연동 테스트
 - [x] 전체 목록 api 연동
 - [x] 등록버튼 컴포넌트 화
-- [ ] 등록 기능 관련 editor 구현
+- [x] Editor, EditorPage컨포넌트 분리
+- [x] EditorPage, Editor 1차 구현
+- [x] Editor, EditorPage 2차 구현
+- [x] Editor, EditorPage 리펙토링
