@@ -1,4 +1,4 @@
-import Editor from "./editor/Editor.js";
+import EditorPage from "./editor/EditorPage.js";
 import PostPage from "./sidebar/PostPage.js";
 
 export default function App ({ $target }) {
@@ -16,13 +16,16 @@ export default function App ({ $target }) {
     })
     postPage.setState()
 
-    const editorPage = new Editor({ 
+    const editorPage = new EditorPage({ 
         $target: $rendingContainer, 
         initialState: {
+            postId: 'new',
             post: {
                 title: '',
-                cotent: ''
+                content: ''
             }
         }
     })
+
+    // editorPage.setState();
 }
