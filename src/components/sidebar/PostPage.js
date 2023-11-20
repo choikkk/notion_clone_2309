@@ -1,4 +1,5 @@
 import NewBtn from "../\bbutton/NewBtn.js"
+import { pushUrl } from "../../utils/Router.js"
 import { request } from "../../utils/api.js"
 import PostList from "./PostList.js"
 
@@ -10,17 +11,23 @@ export default function PostPage ({ $target }) {
     const postList = new PostList({ 
       $target: $page,
       initialState: [],
-      onAttach: async () => {
+      onAttach: async (id) => {
         await request('/documents', {
            method: 'POST',
-           body: {}
+           body: JSON.stringify({
+            title: '제목없음',
+            parent: id
+           })
         })
         this.setState()
       },
-      onDelete: async () => {
-        await request('/documents', {
+      onDelete: async (id) => {
+        await request(`/documents/${id}`, {
           method: 'DELETE'
         })
+
+        pushUrl('/')
+
         this.setState()
       }
     })
@@ -29,7 +36,8 @@ export default function PostPage ({ $target }) {
       $target: $page,
       initialState: {
         text: '+ New Page',
-        name: 'addNew'
+        name: 'addNew',
+        link: 'new'
       }
     })
     

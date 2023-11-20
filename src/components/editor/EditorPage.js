@@ -4,7 +4,7 @@ import Editor from "./Editor.js";
 export default function EditorPage({ $target, initialState }) {
     const $page = document.createElement('div')
 
-    this.state = initialState;
+    this.state = initialState
 
     const post = {
         title: '',
@@ -21,14 +21,14 @@ export default function EditorPage({ $target, initialState }) {
                         method: 'POST',
                         body: JSON.stringify(editPost)
                     })
-
+        
                     if (editPost.content) {
                         await request(`/documents/${responsePost.id}`, {
                             method: 'PUT',
                             body: JSON.stringify(editPost)
                         })
                     }
-
+                    history.replaceState(null, null, `/documents/${responsePost.id}`)
                     this.setState({
                         postId: responsePost.id
                     })
@@ -46,7 +46,6 @@ export default function EditorPage({ $target, initialState }) {
         if (nextState === undefined) {
             return
         }
-
         if (this.state.postId !== nextState.postId) {
             this.state = nextState
 
@@ -58,19 +57,20 @@ export default function EditorPage({ $target, initialState }) {
             }
             return
         }
+        
         this.state = nextState
 
+        this.render()
         editor.setState(this.state.post || {
             title: '',
             content: ''
         })
     }
+    
 
     this.render = () => {
         $target.appendChild($page)
     }
-
-    this.render()
 
 
     const fetchPost = async () => {

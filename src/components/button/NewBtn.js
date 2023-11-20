@@ -15,15 +15,8 @@ export default function NewBtn ({$target, initialState}) {
     this.render()
 
     $btn.addEventListener('cilck', () => {
-        console.log(1)
-        request('/documents', {
-            method: 'POST',
-            body: JSON.stringify({
-                title: '수동등록',
-                parent: null
-            })
-        })
+        const { link } = this.state
+        pushUrl(`/documents/${link}`)
     })
-
 
 }
